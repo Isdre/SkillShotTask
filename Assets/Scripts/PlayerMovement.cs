@@ -32,7 +32,9 @@ public class PlayerMovement : MonoBehaviour {
     [Header("Dash Settings")] 
     [SerializeField] private float dashForce;
     [SerializeField] private float dashCooldown;
+    [SerializeField] private float dashDelay = 0.25f;
     private float _dashTimer;
+    private float _dashDelayTimer;
 
     [Header("Slide Settings")] 
     [SerializeField] private float slideDrag;
@@ -89,8 +91,12 @@ public class PlayerMovement : MonoBehaviour {
             StopSlide();
 
         _dashTimer -= Time.deltaTime;
+        _dashDelayTimer -= Time.deltaTime;
         
-        if (Input.GetKeyDown(KeyCode.LeftShift) && _dashTimer <= 0f) Dash();
+        if (Input.GetKeyDown(KeyCode.LeftShift)) _dashDelayTimer = dashDelay;
+        
+        if (_dashDelayTimer >= 0f & _dashTimer <= 0f) Dash();
+        
         
         SpeedConstraint();
         
@@ -125,8 +131,7 @@ public class PlayerMovement : MonoBehaviour {
     }
 
     private void SpeedConstraint() {
-        if (_grounded && Math.Abs(_rigidbody.velocity.y) <= 0.01f) _speedConstraint = groundSpeedConstraint;
-        else _speedConstraint = airSpeedConstraint;
+        if (_grounded & _dashTimer <= 0f) _speedConstraint = groundSpeedConstraint;
         
         Vector3 speedVector = new Vector3(_rigidbody.velocity.x,0f,_rigidbody.velocity.z);
 
@@ -142,6 +147,7 @@ public class PlayerMovement : MonoBehaviour {
     }
 
     private void Dash() {
+        _speedConstraint = airSpeedConstraint;
         _rigidbody.AddForce(dashForce * _direction.normalized, ForceMode.Impulse);
         _dashTimer = dashCooldown;
     }

@@ -2011,14 +2011,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   text: {fileID: 2070935629}
   speed: 70
-  groundSpeedConstraint: 7
-  airSpeedConstraint: 15
+  groundSpeedConstraint: 10
+  airSpeedConstraint: 20
   jumpForce: 10
   airControler: 0.25
   airDrag: 1
   jumpDelay: 0.25
   dashForce: 10
   dashCooldown: 1.5
+  dashDelay: 0.25
   slideDrag: 1
   smooth: 5
   tiltAngle: 60
